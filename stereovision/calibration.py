@@ -208,12 +208,16 @@ class StereoCalibrator(object):
         side = "left"
         self.object_points.append(self.corner_coordinates)
         for image in image_pair:
-            corners = self._get_corners(image)
-            if show_results:
-                self._show_corners(image, corners)
-            self.image_points[side].append(corners.reshape(-1, 2))
-            side = "right"
-            self.image_count += 1
+            try:
+                corners = self._get_corners(image)
+                if show_results:
+                    self._show_corners(image, corners)
+                self.image_points[side].append(corners.reshape(-1, 2))
+                side = "right"
+                self.image_count += 1
+            except:
+                print('cannot find chessboard, ignoring this image')
+            
 
     def calibrate_cameras(self):
         """Calibrate cameras based on found chessboard corners."""
